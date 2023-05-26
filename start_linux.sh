@@ -12,6 +12,25 @@ case "${OS_ARCH}" in
     *)          echo "Unknown system architecture: $OS_ARCH! This script runs only on x86_64 or arm64" && exit
 esac
 
+# Find the CUDA library path
+find_cuda_with_nvcc() {
+    # Check if 'nvcc' command is available on the system
+    if command -v nvcc &> /dev/null
+    then
+        # Use 'nvcc' to get the CUDA installation path
+        CUDA_PATH=$(dirname $(dirname $(which nvcc)))
+        
+        # Print the CUDA path
+        echo "CUDA Path from 'nvcc': $CUDA_PATH"
+    else
+        # If 'nvcc' is not available, print an error message
+        echo "'nvcc' command could not be found. Please make sure CUDA is installed correctly."
+    fi
+}
+
+# Call the function
+find_cuda_with_nvcc
+
 # config
 INSTALL_DIR="$(pwd)/installer_files"
 CONDA_ROOT_PREFIX="$(pwd)/installer_files/conda"
